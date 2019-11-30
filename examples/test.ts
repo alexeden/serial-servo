@@ -12,6 +12,11 @@ const port = new SerialPort('/dev/ttyAMA0', portOpts, error => {
   }
 });
 
+// Read data that is available but keep the stream in "paused mode"
+port.on('readable', () => {
+  console.log('Data:', port.read());
+});
+
 
 // Open errors will be emitted as an error event
 port.on('error', error => {
