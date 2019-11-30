@@ -1,0 +1,11 @@
+{
+  "ext": "ts,json,cc,h,gyp",
+  "exec": "node sync",
+  "events": {},
+  "watch": [
+    "src/**",
+    "examples/**",
+    "package.json",
+    "binding.gyp"
+  ]
+}

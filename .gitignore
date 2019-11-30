@@ -87,3 +87,12 @@ typings/
 
 # Electron-Forge
 out/
+
+
+.remote-sync.json
+sync.config.json
+sshpi
+/build
+.vscode/*
+!.vscode/settings.json
+.DS_store

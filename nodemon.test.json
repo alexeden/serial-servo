@@ -1,0 +1,11 @@
+{
+  "ext": "ts,json,cc,h,gyp",
+  "exec": "npm run test -- examples/test.ts",
+  "events": {},
+  "watch": [
+    "src/**",
+    "examples/**",
+    "package.json",
+    "binding.gyp"
+  ]
+}
