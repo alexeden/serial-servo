@@ -11,6 +11,7 @@
     "build": "rimraf dist && tsc -p src",
     "test": "ts-node -P examples/tsconfig.json",
     "lint": "tslint -c ./tslint.json --project examples && tslint -c ./tslint.json --project src",
+    "list": "serialport-list",
     "prepublish": "npm run lint && npm run build",
     "sync-changes": "echo 'Changes will be pushed to remote device' && nodemon --config nodemon.sync.json"
   },
@@ -28,6 +29,7 @@
   },
   "license": "MITNFA",
   "devDependencies": {
+    "@serialport/list": "^8.0.4",
     "@types/node": "^12.12.14",
     "chalk": "^3.0.0",
     "nodemon": "^2.0.1",
