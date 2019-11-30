@@ -1,0 +1,2 @@
+﻿Please check the Demo directory befort use. Special instructions on the Raspberry Pi 3 control bus servo. pdf
+This demo controls the No.1 servo, so you must first write the servo ID to 1. servo default ID is 1

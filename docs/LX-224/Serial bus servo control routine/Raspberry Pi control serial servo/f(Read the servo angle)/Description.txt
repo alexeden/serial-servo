@@ -1,0 +1,7 @@
+﻿
+If you are using your own Raspberry Pi plus serial steering gear to debug the small board instead of our big Raspberry Pi expansion board, please comment out the portInit, portWrite, portRead functions in the program. Please also comment out the call to pigpio. You don't need to install pigpio anymore, 
+and the delay of 0.00034 in readPosition can be removed. If the received data is incomplete, the delay of 0.005 can be extended slightly.
+
+Please check the Demo directory before use. Special instructions on the Raspberry Pi 3 control bus servo.pdf
+
+And follow the instructions to modify the configuration of the Raspberry Pi. This demo controls the No. 1 servo, so you must first write the servo ID to 1.  Servo default ID is 1

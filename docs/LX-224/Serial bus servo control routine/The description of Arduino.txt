@@ -1,0 +1,5 @@
+In the example, all the arduino code is developed under  Arduino Leonardo, and tested under Arduino Leonardo ¡¢ Arduino UNO ¡¢ Arduino MEGA 2560. LOBOT_DEBUG macro is used to print debug data. Opening this macro in Arduino UNO may cause an unknown error, and has not been tested in depth.
+When programming the Arduino UNO, disconnect the Arduino UNO from the servos. Otherwise, the program may not be burned properly due to conflicts.
+When programming the Arduino UNO, disconnect the Arduino UNO from the servos. Otherwise, the program may not be burned properly due to conflicts.
+
+

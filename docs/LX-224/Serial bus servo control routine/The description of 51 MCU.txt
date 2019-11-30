@@ -1,0 +1,3 @@
+In the example, all 51 routines are based on the STC12C5A60S2, and are tested with the 11.0592MHz external crystal under STC12C5A60S2
+In the example, all 51 routines are tested under the STC15W4K16S4 by modifying the hardware-related code such as serial port initialization and using the internal clock at 22.1184MHz
+The STC89C52RC test failed.The STC89C52RC serial port cannot generate a baud rate of 11520 under the 11.0592MHz clock.It requires a crystal oscillator of 22.1184 and has not been further tested.

@@ -1,0 +1,2 @@
+In the example, all the stm32 code is development and tested under stm32f103c8t6.
+The development environment is Keil 5.22, stm32f10x standard peripheral firmware library version 3.5

@@ -1,0 +1,11 @@
+1) The BusLinker debug board needs to be installed before it can be used. After opening Bus Servo Terminal.exe, you need to select the correct COM port for serial port connection.
+
+2) The bus servo controller does not need to be equipped with a driver, and the computer is free of drive. When you use it for the first time, you only need to connect the controller to the computer and wait for tens of seconds. 
+The driver will be installed automatically and ready for use.
+
+3) The operating system is XP and needs to install dotNetFx40_Client_x86_x64.exe.If it is already installed, ignore.
+
+4) Still can't open, please right click and run as "administrator".
+
+5) The serial port communication of the debug board can only be connected to the 5v MCU system for normal communication, such as arduino. 
+If connected to usb-ttl, it cannot communicate normally.
