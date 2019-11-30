@@ -31,6 +31,7 @@
   "devDependencies": {
     "@serialport/list": "^8.0.4",
     "@types/node": "^12.12.14",
+    "@types/serialport": "^7.0.4",
     "chalk": "^3.0.0",
     "nodemon": "^2.0.1",
     "rimraf": "^3.0.0",
@@ -38,5 +39,8 @@
     "ts-node": "^8.5.4",
     "tslint": "^5.20.1",
     "typescript": "^3.7.2"
+  },
+  "dependencies": {
+    "serialport": "^8.0.5"
   }
 }
