@@ -1,0 +1,27 @@
+{
+  "name": "serial-servo",
+  "productName": "serial-servo",
+  "version": "1.0.0",
+  "description": "Node.js API for LX-family serial servos",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "homepage": "https://github.com/alexeden/serial-servo#readme",
+  "scripts": {
+    "test-changes": "echo 'Source will reexecute on changes' && nodemon --config nodemon.test.json",
+    "build": "rimraf dist && tsc -p src",
+    "test": "ts-node -P examples/tsconfig.json",
+    "lint": "tslint -c ./tslint.json --project examples && tslint -c ./tslint.json --project src",
+    "prepublish": "npm run lint && npm run build",
+    "sync-changes": "echo 'Changes will be pushed to remote device' && nodemon --config nodemon.sync.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexeden/serial-servo.git"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Alex Eden",
+    "email": "aeden@payitgov.com"
+  },
+  "license": "MIT"
+}
