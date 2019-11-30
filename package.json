@@ -19,9 +19,12 @@
     "url": "git+https://github.com/alexeden/serial-servo.git"
   },
   "keywords": [],
+  "bugs": {
+    "url": "https://github.com/alexeden/pidex/issues"
+  },
   "author": {
     "name": "Alex Eden",
-    "email": "aeden@payitgov.com"
+    "email": "alexandereden91@gmail.com"
   },
   "license": "MIT"
 }
