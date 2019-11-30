@@ -10,24 +10,15 @@ const port = new SerialPort('/dev/ttyAMA0', portOpts, error => {
   }
 });
 
-const readPosPackage = Buffer.of(
-  0x55,
-  0x55,
-  0x01,
-  0x03,
-  0x1c,
-  0xFF & ~(0x01 + 0x03 + 0x1c)
-);
+const rPosPacket =  (id: number) => Buffer.of( 0x55, 0x55, id, 0x03, 0x1c, 0xFF & ~(id + 0x03 + 0x1c));
 
 port.on('data', data => {
   console.log('Data event:', data);
 });
 
-const writeReadPosPackage = () => {
-  console.log('writing packet');
-
+const writeReadPosPackage = (id: number) => {
   return new Promise((ok, err) => {
-    port.write(readPosPackage, (error, bytesWritten, ...args) => {
+    port.write(rPosPacket(id), (error, bytesWritten, ...args) => {
       if (error) {
         console.error('Write error: ', error);
         err(error);
