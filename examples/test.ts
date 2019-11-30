@@ -25,6 +25,7 @@ port.on('data', data => {
 
 const writeReadPosPackage = () => {
   console.log('writing packet');
+
   return new Promise((ok, err) => {
     port.write(readPosPackage, (error, bytesWritten, ...args) => {
       if (error) {

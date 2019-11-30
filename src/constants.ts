@@ -1,3 +1,11 @@
+export type CommandType = 'W' | 'R';
+
+// export interface Command {
+//   value: number;
+//   length: number;
+//   type: CommandType;
+// }
+
 export enum Command {
   ServoMoveTimeWrite = 1,
   ServoMoveTimeRead = 2,
