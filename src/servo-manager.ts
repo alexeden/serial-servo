@@ -1,10 +1,9 @@
 import * as SerialPort from 'serialport';
+import { CommandPacket } from './command-generator';
 
 export class ServoManager {
   static async ofPath(path: string) {
-
     const portOpts: SerialPort.OpenOptions = {
-      autoOpen: false,
       baudRate: 115200,
     };
 
@@ -27,5 +26,20 @@ export class ServoManager {
 
   get isOpen() {
     return this.port.isOpen;
+  }
+
+  sendCommand(id: number, commandPacket: CommandPacket) {
+    return new Promise((ok, err) =>
+      this.port.write(commandPacket, (error, bytesWritten) => {
+        if (error) {
+          console.error('Write error: ', error);
+          err(error);
+        }
+        else {
+          console.log(`${bytesWritten} bytes written to port`);
+          ok(bytesWritten);
+        }
+      })
+    );
   }
 }
