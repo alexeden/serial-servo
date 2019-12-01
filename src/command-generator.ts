@@ -23,6 +23,6 @@ export class CommandGenerator {
   }
 
   static getAngle(id: number) {
-
+    return CommandGenerator.generate(Command.ServoPosRead, id);
   }
 }
