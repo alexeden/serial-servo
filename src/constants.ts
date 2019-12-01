@@ -1,3 +1,5 @@
+export const CommandHeader = 'UU';
+
 export enum Command {
   ServoMoveTimeWrite = 1,
   ServoMoveTimeRead = 2,
