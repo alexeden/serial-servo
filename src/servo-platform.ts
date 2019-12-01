@@ -1,6 +1,7 @@
 import * as SerialPort from 'serialport';
-import { CommandHeader } from './constants';
+import { CommandHeader, Response } from './constants';
 import { CommandPacket } from './command-generator';
+import { responsePacketFromBuffer } from './command-packet';
 
 export class ServoPlatform {
   static async ofPath(path: string) {
@@ -39,20 +40,22 @@ export class ServoPlatform {
     const headerIndex = buffer.indexOf(CommandHeader);
     const nextHeaderIndex = buffer.indexOf(CommandHeader, 2);
     if (headerIndex >= 0) {
-      const firstPacket = nextHeaderIndex >= 0
+      const firstBuffer = nextHeaderIndex >= 0
         ? buffer.subarray(headerIndex, nextHeaderIndex)
         : buffer.subarray(headerIndex);
-      console.log('first packet: ', firstPacket);
+
+      const response = responsePacketFromBuffer(firstBuffer);
+      console.log(`${Response[response.command]} packet: `, response);
     }
     else {
       console.log('bad packet: ', buffer);
     }
 
     if (nextHeaderIndex >= 0) {
-      const nextPacket = buffer.subarray(nextHeaderIndex);
-      // console.log('next packet: ', nextPacket);
+      const nextBuffer = buffer.subarray(nextHeaderIndex);
+      // console.log('next packet: ', nextBuffer);
 
-      return this.parse(nextPacket);
+      return this.parse(nextBuffer);
     }
     // console.log('parsing buffer: ', buffer, 'buffer length: ', buffer.length,
     // 'header index: ', headerIndex, 'next header index: ', nextHeaderIndex);
