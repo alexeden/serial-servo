@@ -31,6 +31,23 @@ export enum Command {
   ServoLedErrorRead = 36,
 }
 
+export enum Response {
+  ServoMoveTimeRead = 2,
+  ServoMoveTimeWaitRead = 8,
+  ServoIdRead = 14,
+  ServoAngleOffsetRead = 19,
+  ServoAngleLimitRead = 21,
+  ServoVinLimitRead = 23,
+  ServoTempMaxLimitRead = 25,
+  ServoTempRead = 26,
+  ServoVinRead = 27,
+  ServoPosRead = 28,
+  ServoOrMotorModeRead = 30,
+  ServoLoadOrUnloadRead = 32,
+  ServoLedCtrlRead = 34,
+  ServoLedErrorRead = 36,
+}
+
 
 // tslint:disable-next-line: cyclomatic-complexity
 export const commandDataLength = (command: Command): number => {
@@ -67,6 +84,31 @@ export const commandDataLength = (command: Command): number => {
     case Command.ServoAngleLimitWrite:
     case Command.ServoVinLimitWrite:
     case Command.ServoOrMotorModeWrite:
+      return 7;
+  }
+};
+
+// tslint:disable-next-line: cyclomatic-complexity
+export const responseDataLength = (response: Response): number => {
+  switch (response) {
+    case Response.ServoIdRead:
+    case Response.ServoAngleOffsetRead:
+    case Response.ServoTempMaxLimitRead:
+    case Response.ServoTempRead:
+    case Response.ServoLoadOrUnloadRead:
+    case Response.ServoLedCtrlRead:
+    case Response.ServoLedErrorRead:
+      return 4;
+
+    case Response.ServoVinRead:
+    case Response.ServoPosRead:
+      return 5;
+
+    case Response.ServoMoveTimeRead:
+    case Response.ServoMoveTimeWaitRead:
+    case Response.ServoAngleLimitRead:
+    case Response.ServoVinLimitRead:
+    case Response.ServoOrMotorModeRead:
       return 7;
   }
 };
