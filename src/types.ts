@@ -1,3 +1,8 @@
+export enum MotorMode {
+  Servo,
+  Motor,
+}
+
 export enum MotorState {
   Off,
   On,
@@ -29,10 +34,12 @@ export interface Servo {
   maxVolts: number;
   minAngle: number;
   motorOn: boolean;
+  motorMode: MotorMode;
   moveTime: number;
   moveWaitTime: number;
   offsetAngle: number;
   targetAngle: number;
+  rotationSpeed: number;
   temp: number;
   volts: number;
 }
