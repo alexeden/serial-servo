@@ -1,2 +1,2 @@
 export * from './command-generator';
-export * from './servo-manager';
+export * from './servo-platform';

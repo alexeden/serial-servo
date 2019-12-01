@@ -1,7 +1,7 @@
 import * as SerialPort from 'serialport';
 import { CommandPacket } from './command-generator';
 
-export class ServoManager {
+export class ServoPlatform {
   static async ofPath(path: string) {
     const portOpts: SerialPort.OpenOptions = {
       baudRate: 115200,
@@ -14,7 +14,7 @@ export class ServoManager {
           err(error);
         }
         else {
-          ok(new ServoManager(port));
+          ok(new ServoPlatform(port));
         }
       });
     });

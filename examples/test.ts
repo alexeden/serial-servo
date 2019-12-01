@@ -1,7 +1,7 @@
 import * as SerialPort from 'serialport';
-import { ServoManager } from '../src';
+import { ServoPlatform } from '../src';
 
-console.log(ServoManager);
+console.log(ServoPlatform);
 
 const portOpts: SerialPort.OpenOptions = {
   autoOpen: false,
@@ -64,7 +64,7 @@ const flush = () => new Promise((ok, err) => {
 
 const wait = (t: number) => new Promise(ok => setTimeout(ok, t));
 (async () => {
-  const servoMan = await ServoManager.ofPath('/dev/ttyAMA0');
+  const servoMan = await ServoPlatform.ofPath('/dev/ttyAMA0');
   console.log(servoMan);
   console.log(await SerialPort.list());
 
