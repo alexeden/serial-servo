@@ -16,19 +16,23 @@ port.on('data', data => {
   console.log('Data event:', data);
 });
 
-const writeReadPosPackage = (id: number) => {
-  return new Promise((ok, err) => {
-    port.write(rPosPacket(id), (error, bytesWritten, ...args) => {
-      if (error) {
-        console.error('Write error: ', error);
-        err(error);
-      }
-      else {
-        console.log(`${bytesWritten} bytes written to port`);
-        ok(bytesWritten);
-      }
-    });
-  });
+const writeReadPosPackage = (ids: number[]) => {
+  return Promise.all(
+    ids.map(id =>
+      new Promise((ok, err) => {
+        port.write(rPosPacket(id), (error, bytesWritten, ...args) => {
+          if (error) {
+            console.error('Write error: ', error);
+            err(error);
+          }
+          else {
+            console.log(`${bytesWritten} bytes written to port`);
+            ok(bytesWritten);
+          }
+        });
+      })
+    )
+  );
 };
 
 // Open errors will be emitted as an error event
@@ -38,22 +42,10 @@ port.on('error', error => {
 
 const wait = (t: number) => new Promise(ok => setTimeout(ok, t));
 (async () => {
-  await writeReadPosPackage();
+  console.log(await SerialPort.list());
+
+  await writeReadPosPackage([1, 2, 3, 4, 5, 6]);
   await wait(1000);
-  await writeReadPosPackage();
-  await wait(1000);
-  await writeReadPosPackage();
-  await wait(1000);
-  await writeReadPosPackage();
-  await wait(1000);
-  await writeReadPosPackage();
-  await wait(1000);
-  await writeReadPosPackage();
-  await wait(1000);
-  await writeReadPosPackage();
-  await wait(1000);
-  await writeReadPosPackage();
-  await wait(1000);
-  await writeReadPosPackage();
+  await writeReadPosPackage([1, 2, 3, 4, 5, 6]);
   await wait(1000);
 })();
