@@ -8,7 +8,7 @@ export type ResponsePacket<C extends Response> = {
   command: C;
   length: number;
   paramBytes: Buffer;
-  data: ResponsePacketData<C>;
+  data: Partial<Servo>;
 };
 
 export type ResponsePacketData<C extends Response>
@@ -42,8 +42,64 @@ export type ResponsePacketData<C extends Response>
   ? Pick<Servo, 'id' | 'ledAlarms'>
   : never;
 
-const extractResponseData = <C extends Response>(command: C, id: number, paramBytes: Buffer): ResponsePacketData<C> => {
+const extractResponseData = <C extends Response>(command: Response, id: number, paramBytes: Buffer): Partial<Servo> => {
+  switch (command) {
+    case Response.ServoMoveTimeRead: {
+      return { id, moveTime: 0 };
+    }
+    case Response.ServoMoveTimeWaitRead: {
+      return { id };
+    }
+    case Response.ServoIdRead: {
+      return { id };
+    }
+    case Response.ServoAngleOffsetRead: {
+      return { id };
+    }
+    case Response.ServoAngleLimitRead: {
+      console.log(paramBytes);
 
+      return {
+        id,
+        minAngle: paramBytes.readInt16BE(0),
+        maxAngle: paramBytes.readInt16BE(2),
+      };
+    }
+    case Response.ServoVinLimitRead: {
+      return { id };
+    }
+    case Response.ServoTempMaxLimitRead: {
+      return { id };
+    }
+    case Response.ServoTempRead: {
+      return { id };
+    }
+    case Response.ServoVinRead: {
+      return { id };
+    }
+    case Response.ServoPosRead: {
+      // const [ lsb, msb ] = paramBytes;
+
+      return {
+        id,
+        angle: paramBytes.readInt16LE(0),
+        // (msb & 0xFF << 8) | (lsb & 0xFF),
+      };
+    }
+    case Response.ServoOrMotorModeRead: {
+      return { id };
+    }
+    case Response.ServoLoadOrUnloadRead: {
+      return { id };
+    }
+    case Response.ServoLedCtrlRead: {
+      return { id };
+    }
+    case Response.ServoLedErrorRead: {
+      return { id };
+    }
+    // default: return { id };
+  }
 };
 
 export const responsePacketFromBuffer = <C extends Response>(rawBuffer: Buffer): ResponsePacket<C> => {
