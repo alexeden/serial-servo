@@ -36,3 +36,43 @@ export enum Command {
   ServoLedErrorWrite = 35,
   ServoLedErrorRead = 36,
 }
+
+
+// tslint:disable-next-line: cyclomatic-complexity
+export const commandDataLength = (command: Command): number => {
+  switch (command) {
+    case Command.ServoMoveTimeRead:
+    case Command.ServoMoveTimeWaitRead:
+    case Command.ServoMoveStart:
+    case Command.ServoMoveStop:
+    case Command.ServoIdRead:
+    case Command.ServoAngleOffsetWrite:
+    case Command.ServoAngleOffsetRead:
+    case Command.ServoAngleLimitRead:
+    case Command.ServoVinLimitRead:
+    case Command.ServoTempMaxLimitRead:
+    case Command.ServoTempRead:
+    case Command.ServoVinRead:
+    case Command.ServoPosRead:
+    case Command.ServoOrMotorModeRead:
+    case Command.ServoLoadOrUnloadRead:
+    case Command.ServoLedCtrlRead:
+    case Command.ServoLedErrorRead:
+      return 3;
+
+    case Command.ServoIdWrite:
+    case Command.ServoAngleOffsetAdjust:
+    case Command.ServoTempMaxLimitWrite:
+    case Command.ServoLoadOrUnloadWrite:
+    case Command.ServoLedCtrlWrite:
+    case Command.ServoLedErrorWrite:
+      return 4;
+
+    case Command.ServoMoveTimeWrite:
+    case Command.ServoMoveTimeWaitWrite:
+    case Command.ServoAngleLimitWrite:
+    case Command.ServoVinLimitWrite:
+    case Command.ServoOrMotorModeWrite:
+      return 7;
+  }
+};
