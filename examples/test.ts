@@ -20,12 +20,13 @@ const wait = (t: number) => new Promise(ok => setTimeout(ok, t));
   platform.on('servoUpdate', servo => {
     // console.log('SERVO UPDATED: ', servo);
   });
-  await platform.sendCommand(CommandGenerator.setTargetAngleAndTime(0xFE, 1000, 0));
+  await platform.sendCommand(CommandGenerator.setAngleLimits(4, { maxAngle: 400, minAngle: 600 }));
+  await platform.sendCommand(CommandGenerator.setTargetAngleAndTime(0xFE, 0, 0));
   // await platform.sendCommand(CommandGenerator.setTargetAngleAndTime(3, 0, 0));
   // await wait(2000);
   for (const id of [...Array(6).keys()].map(k => k + 1)) {
     // await platform.sendCommand(CommandGenerator.getId(id));
-    // await platform.sendCommand(CommandGenerator.getAngleLimits(id));
+    await platform.sendCommand(CommandGenerator.getAngleLimits(id));
     await platform.sendCommand(CommandGenerator.getPosition(id));
     // await platform.sendCommand(CommandGenerator.getLedIsOn(id));
     // await platform.sendCommand(CommandGenerator.getLedAlarms(id));

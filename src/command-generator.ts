@@ -70,6 +70,13 @@ export class CommandGenerator {
   }
 
   /** ServoAngleLimitWrite */
+  static setAngleLimits(id: number, { minAngle, maxAngle } = { minAngle: 0, maxAngle: 1000 }) {
+    const params = Buffer.allocUnsafe(4);
+    params.writeUInt16LE(minAngle, 0);
+    params.writeUInt16LE(maxAngle, 2);
+
+    return CommandGenerator.generate(Command.ServoAngleLimitWrite, id, ...params);
+  }
 
   /** ServoAngleLimitRead */
   static getAngleLimits(id: number) {
