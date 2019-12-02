@@ -1,9 +1,10 @@
 import * as SerialPort from 'serialport';
-import { CommandHeader, Response } from './constants';
+import { Response } from './constants';
 import { CommandPacket } from './command-generator';
-import { responsePacketFromBuffer } from './command-packet';
+import { responsePacketFromBuffer, splitRawBuffer } from './command-packet';
+import { Stream } from 'stream';
 
-export class ServoPlatform {
+export class ServoPlatform extends Stream {
   static async ofPath(path: string) {
     const portOpts: SerialPort.OpenOptions = {
       baudRate: 115200,
@@ -25,7 +26,14 @@ export class ServoPlatform {
   private constructor(
     private readonly port: SerialPort
   ) {
-    this.port.on('data', this.parse.bind(this));
+    super();
+
+    this.port.on('data', (rawBuffer: Buffer) =>
+      splitRawBuffer(rawBuffer).forEach((buffer, i) => {
+        const response = responsePacketFromBuffer(buffer);
+        console.log(`${Response[response.command]} packet: `, response);
+      })
+    );
 
     this.port.on('error', error => {
       console.log('Port error event: ', error.message);
@@ -36,44 +44,9 @@ export class ServoPlatform {
     return this.port.isOpen;
   }
 
-  parse(buffer: Buffer): any {
-    const headerIndex = buffer.indexOf(CommandHeader);
-    const nextHeaderIndex = buffer.indexOf(CommandHeader, 2);
-    if (headerIndex >= 0) {
-      const firstBuffer = nextHeaderIndex >= 0
-        ? buffer.subarray(headerIndex, nextHeaderIndex)
-        : buffer.subarray(headerIndex);
-
-      const response = responsePacketFromBuffer(firstBuffer);
-      console.log(`${Response[response.command]} packet: `, response);
-    }
-    else {
-      console.log('bad packet: ', buffer);
-    }
-
-    if (nextHeaderIndex >= 0) {
-      const nextBuffer = buffer.subarray(nextHeaderIndex);
-      // console.log('next packet: ', nextBuffer);
-
-      return this.parse(nextBuffer);
-    }
-    // console.log('parsing buffer: ', buffer, 'buffer length: ', buffer.length,
-    // 'header index: ', headerIndex, 'next header index: ', nextHeaderIndex);
-  }
-
   sendCommand(commandPacket: CommandPacket) {
     return new Promise((ok, err) => {
       const sent = this.port.write(commandPacket);
-      // , (error, bytesWritten) => {
-      //   if (error) {
-      //     console.error('Write error: ', error);
-      //     err(error);
-      //   }
-      //   else {
-      //     console.log(`${bytesWritten} bytes written to port`);
-      //     ok(bytesWritten);
-      //   }
-      // });
       console.log('command sent?', sent);
 
       this.port.drain(error => {
@@ -81,12 +54,8 @@ export class ServoPlatform {
           console.error('drain error: ', error);
           err(error);
         }
-        else {
-          console.log(`port drained after write`);
-          ok();
-        }
+        else ok();
       });
-
     });
   }
 }
