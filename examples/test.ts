@@ -13,6 +13,13 @@ const wait = (t: number) => new Promise(ok => setTimeout(ok, t));
   console.log(await SerialPort.list());
   const platform = await ServoPlatform.ofPath('/dev/ttyAMA0');
 
+  platform.on('newServo', servo => {
+    console.log('SERVO ADDED: ', servo);
+  });
+
+  platform.on('servoUpdate', servo => {
+    console.log('SERVO UPDATED: ', servo);
+  });
   console.log(await platform.sendCommand(CommandGenerator.getAngleLimits(1)));
   console.log(await platform.sendCommand(CommandGenerator.getAngle(1)));
   console.log(await platform.sendCommand(CommandGenerator.getAngleLimits(2)));

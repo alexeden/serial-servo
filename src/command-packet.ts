@@ -8,7 +8,7 @@ export type ResponsePacket = {
   command: Response;
   length: number;
   paramBytes: Buffer;
-  data: Partial<Servo>;
+  data: Servo;
 };
 
 // export type ResponsePacketData<C extends Response>
@@ -42,7 +42,7 @@ export type ResponsePacket = {
 //   ? Pick<Servo, 'id' | 'ledAlarms'>
 //   : never;
 
-const extractResponseData = (command: Response, id: number, paramBytes: Buffer): Partial<Servo> => {
+const extractResponseData = (command: Response, id: number, paramBytes: Buffer): Servo => {
   switch (command) {
     case Response.ServoMoveTimeRead: {
       return { id, moveTime: 0 };

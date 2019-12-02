@@ -1,7 +1,8 @@
 import * as SerialPort from 'serialport';
 import { Response } from './constants';
 import { CommandPacket } from './command-generator';
-import { responsePacketFromBuffer, splitRawBuffer } from './command-packet';
+import { responsePacketFromBuffer, splitRawBuffer, ResponsePacket } from './command-packet';
+import { Servo } from './types';
 import { Stream } from 'stream';
 
 export class ServoPlatform extends Stream {
@@ -23,16 +24,23 @@ export class ServoPlatform extends Stream {
     });
   }
 
+  private readonly servos: Map<number, Servo>;
+
   private constructor(
     private readonly port: SerialPort
   ) {
     super();
 
+    this.servos = new Map();
+
     this.port.on('data', (rawBuffer: Buffer) =>
-      splitRawBuffer(rawBuffer).forEach((buffer, i) => {
-        const response = responsePacketFromBuffer(buffer);
-        console.log(`${Response[response.command]} packet: `, response);
-      })
+      splitRawBuffer(rawBuffer)
+        .map(responsePacketFromBuffer)
+        .filter(response => response.ok)
+        .forEach((response, i) => {
+          console.log(`${Response[response.command]} packet: `, response);
+          this.handleResponse(response);
+        })
     );
 
     this.port.on('error', error => {
@@ -42,6 +50,20 @@ export class ServoPlatform extends Stream {
 
   get isOpen() {
     return this.port.isOpen;
+  }
+
+  handleResponse({ id, data, ...response }: ResponsePacket) {
+    if (this.servos.has(id)) {
+      const updatedServo: Servo = { id, ...this.servos.get(id), ...data };
+      this.servos.set(id, updatedServo);
+      this.emit('servoUpdate', updatedServo);
+    }
+    else {
+      const newServo = { id, ...data };
+      this.servos.set(id, newServo);
+      this.emit('newServo', newServo);
+      this.emit('servoUpdate', newServo);
+    }
   }
 
   sendCommand(commandPacket: CommandPacket) {
