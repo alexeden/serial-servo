@@ -50,7 +50,7 @@ const extractResponseData = (command: Response, id: number, paramBytes: Buffer):
     case Response.ServoVinLimitRead: {
       return {
         id,
-        volts: paramBytes.readUInt16LE(0),
+        minVolts: paramBytes.readUInt16LE(0),
         maxVolts: paramBytes.readUInt16LE(2),
       };
     }

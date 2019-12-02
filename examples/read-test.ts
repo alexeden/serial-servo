@@ -13,7 +13,7 @@ import { ServoPlatform, CommandGenerator } from '../src';
     await platform.sendCommand(CommandGenerator.getAngleOffset(id));
     await platform.sendCommand(CommandGenerator.getTemp(id));
     await platform.sendCommand(CommandGenerator.getTempLimit(id));
-    await platform.sendCommand(CommandGenerator.getVoltageLimit(id));
+    await platform.sendCommand(CommandGenerator.getVoltageLimits(id));
     await platform.sendCommand(CommandGenerator.getTargetAngleAndTime(id));
     await platform.sendCommand(CommandGenerator.getMotorIsOn(id));
     await platform.sendCommand(CommandGenerator.getMotorMode(id));

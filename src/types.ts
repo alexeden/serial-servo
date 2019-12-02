@@ -36,8 +36,13 @@ export interface Servo {
    */
   maxTemp?: number;
   /**
+   * Minimum voltage, in millivolts
+   * Range: 4500 to 12000
+   */
+  minVolts?: number;
+  /**
    * Maximum voltage, in millivolts
-   * Range: 6500 to 12000
+   * Range: 4500 to 12000
    */
   maxVolts?: number;
   minAngle?: number;
@@ -68,7 +73,7 @@ export interface Servo {
   temp?: number;
   /**
    * Current voltage, in millivolts
-   * Range: 6500 to 10000
+   * Range: 4500 to 10000
    */
   volts?: number;
 }

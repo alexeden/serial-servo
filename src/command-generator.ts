@@ -51,8 +51,14 @@ export class CommandGenerator {
   }
 
   /** ServoMoveStart */
+  static startMove(id: number) {
+    return CommandGenerator.generate(Command.ServoMoveStart, id);
+  }
 
   /** ServoMoveStop */
+  static stopMove(id: number) {
+    return CommandGenerator.generate(Command.ServoMoveStop, id);
+  }
 
   /** ServoIdWrite */
 
@@ -85,9 +91,16 @@ export class CommandGenerator {
   }
 
   /** ServoVinLimitWrite */
+  static setVoltageLimits(id: number, { minVolts, maxVolts } = { minVolts: 0, maxVolts: 1000 }) {
+    const params = Buffer.allocUnsafe(4);
+    params.writeUInt16LE(minVolts, 0);
+    params.writeUInt16LE(maxVolts, 2);
+
+    return CommandGenerator.generate(Command.ServoVinLimitWrite, id, ...params);
+  }
 
   /** ServoVinLimitRead */
-  static getVoltageLimit(id: number) {
+  static getVoltageLimits(id: number) {
     return CommandGenerator.generate(Command.ServoVinLimitRead, id);
   }
 
