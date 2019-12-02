@@ -132,23 +132,18 @@ export const responsePacketFromBuffer = (rawBuffer: Buffer): ResponsePacket => {
   const length = buffer[3];
   const command = buffer[4];
   const paramBytes = buffer.subarray(5, 5 + length - 3);
+  const checksum = buffer[buffer.length - 1];
+  const compedChecksum = 0xFF & ~(id + length + command + paramBytes.reduce((sum, b) => sum + b, 0));
   const ok = [
     typeof Response[command] === 'string',
     length === responseDataLength(command),
     paramBytes.length === length - 3,
+    checksum === compedChecksum,
   ].every(condition => condition === true);
 
-  // console.log(`${Response[command]} param bytes: `, paramBytes);
-  // if (!ok) {
-  //   console.error('Packet is not okay!', buffer);
-  //   console.log(`Command exists? ${typeof Response[command] === 'string'}`);
-  //   console.log(`Lengths match? ${length === responseDataLength(command)}`);
-  //   console.log(`Length byte is ${length}`);
-  //   console.log(`Expected ${responseDataLength(command)} bytes`);
-  //   console.log(`Param has ${paramBytes.length}  bytes`);
-  // }
-  // const checksum = buffer[buffer.length - 1];
-  // const compedChecksum = 0xFF & ~(id + length + command + paramBytes.reduce((sum, b) => sum + b, 0));
+  if (checksum !== compedChecksum) {
+    throw new Error(`Received a corrupt response packet for ${Response[command]} command!`);
+  }
 
   return {
     id,
