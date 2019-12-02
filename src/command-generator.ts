@@ -103,19 +103,28 @@ export class CommandGenerator {
   /** ServoOrMotorModeWrite */
 
   /** ServoOrMotorModeRead */
+  static getMotorMode(id: number) {
+    return CommandGenerator.generate(Command.ServoOrMotorModeRead, id);
+  }
 
   /** ServoLoadOrUnloadWrite */
 
   /** ServoLoadOrUnloadRead */
+  static getMotorIsOn(id: number) {
+    return CommandGenerator.generate(Command.ServoLoadOrUnloadRead, id);
+  }
 
   /** ServoLedCtrlWrite */
 
   /** ServoLedCtrlRead */
+  static getLedIsOn(id: number) {
+    return CommandGenerator.generate(Command.ServoLedCtrlRead, id);
+  }
 
   /** ServoLedErrorWrite */
 
   /** ServoLedErrorRead */
-
-
-
+  static getLedAlarms(id: number) {
+    return CommandGenerator.generate(Command.ServoLedErrorRead, id);
+  }
 }

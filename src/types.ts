@@ -28,7 +28,7 @@ export interface Servo {
   angle?: number;
   id: number;
   ledAlarms?: Alarm;
-  ledOn?: boolean;
+  ledIsOn?: boolean;
   maxAngle?: number;
   /**
    * Maximum temperature, in degrees Celsius
@@ -41,7 +41,7 @@ export interface Servo {
    */
   maxVolts?: number;
   minAngle?: number;
-  motorOn?: boolean;
+  motorIsOn?: boolean;
   motorMode?: MotorMode;
   /**
    * Current move time to reach target angle, in milliseconds

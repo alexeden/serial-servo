@@ -11,37 +11,6 @@ export type ResponsePacket = {
   data: Servo;
 };
 
-// export type ResponsePacketData<C extends Response>
-//   = C extends Response.ServoMoveTimeRead
-//   ? Pick<Servo, 'id' | 'moveTime'>
-//   : C extends Response.ServoMoveTimeWaitRead
-//   ? Pick<Servo, 'id' | 'moveWaitTime' | 'targetAngle'>
-//   : C extends Response.ServoIdRead
-//   ? Pick<Servo, 'id'>
-//   : C extends Response.ServoAngleOffsetRead
-//   ? Pick<Servo, 'id' | 'offsetAngle'>
-//   : C extends Response.ServoAngleLimitRead
-//   ? Pick<Servo, 'id' | 'maxAngle' | 'minAngle'>
-//   : C extends Response.ServoVinLimitRead
-//   ? Pick<Servo, 'id' | 'maxVolts' | 'volts'>
-//   : C extends Response.ServoTempMaxLimitRead
-//   ? Pick<Servo, 'id' | 'maxTemp'>
-//   : C extends Response.ServoTempRead
-//   ? Pick<Servo, 'id' | 'temp'>
-//   : C extends Response.ServoVinRead
-//   ? Pick<Servo, 'id' | 'volts'>
-//   : C extends Response.ServoPosRead
-//   ? Pick<Servo, 'id' | 'angle'>
-//   : C extends Response.ServoOrMotorModeRead
-//   ? Pick<Servo, 'id' | 'motorMode' | 'rotationSpeed'>
-//   : C extends Response.ServoLoadOrUnloadRead
-//   ? Pick<Servo, 'id' | 'motorOn'>
-//   : C extends Response.ServoLedCtrlRead
-//   ? Pick<Servo, 'id' | 'ledOn'>
-//   : C extends Response.ServoLedErrorRead
-//   ? Pick<Servo, 'id' | 'ledAlarms'>
-//   : never;
-
 const extractResponseData = (command: Response, id: number, paramBytes: Buffer): Servo => {
   switch (command) {
     case Response.ServoMoveTimeRead: {
@@ -59,7 +28,9 @@ const extractResponseData = (command: Response, id: number, paramBytes: Buffer):
       };
     }
     case Response.ServoIdRead: {
-      return { id };
+      return {
+        id,
+      };
     }
     case Response.ServoAngleOffsetRead: {
       return {
@@ -70,10 +41,8 @@ const extractResponseData = (command: Response, id: number, paramBytes: Buffer):
     case Response.ServoAngleLimitRead: {
       return {
         id,
-        minAngle: paramBytes.readInt16BE(0),
-        maxAngle: paramBytes.readInt16BE(2),
-        // minAngle: paramBytes.readInt16BE(0),
-        // maxAngle: paramBytes.readInt16BE(2),
+        minAngle: paramBytes.readInt16BE(0) & 0x3FF,
+        maxAngle: paramBytes.readInt16BE(2) & 0x3FF,
       };
     }
     case Response.ServoVinLimitRead: {
@@ -104,20 +73,33 @@ const extractResponseData = (command: Response, id: number, paramBytes: Buffer):
     case Response.ServoPosRead: {
       return {
         id,
-        angle: paramBytes.readInt16BE(0),
+        angle: paramBytes.readUInt16BE(0) & 0x3FF,
       };
     }
     case Response.ServoOrMotorModeRead: {
-      return { id };
+      return {
+        id,
+        motorMode: paramBytes[0] & 1,
+        rotationSpeed: paramBytes.readUInt16BE(2),
+      };
     }
     case Response.ServoLoadOrUnloadRead: {
-      return { id };
+      return {
+        id,
+        motorIsOn: !!(paramBytes[0] & 1),
+      };
     }
     case Response.ServoLedCtrlRead: {
-      return { id };
+      return {
+        id,
+        ledIsOn: !(paramBytes[0] & 1),
+      };
     }
     case Response.ServoLedErrorRead: {
-      return { id };
+      return {
+        id,
+        ledAlarms: paramBytes[0] & 0xF,
+      };
     }
   }
 };
