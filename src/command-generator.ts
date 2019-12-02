@@ -37,6 +37,8 @@ export class CommandGenerator {
 
   /** ServoMoveTimeWaitRead */
   static getPresetTargetAngleAndTime(id: number) {
+    throw new Error(`"ServoMoveTimeWaitRead" is not implemented. Currently experiences issues with bad response packets from servos.`);
+
     return CommandGenerator.generate(Command.ServoMoveTimeWaitRead, id);
   }
 
@@ -47,6 +49,11 @@ export class CommandGenerator {
   /** ServoIdWrite */
 
   /** ServoIdRead */
+  static getId(id: number) {
+    throw new Error(`"ServoIdRead" is not implemented. Currently experiences issues with bad response packets from servos.`);
+
+    return CommandGenerator.generate(Command.ServoIdRead, id);
+  }
 
   /** ServoAngleOffsetAdjust */
 

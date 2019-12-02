@@ -20,7 +20,8 @@ const wait = (t: number) => new Promise(ok => setTimeout(ok, t));
   platform.on('servoUpdate', servo => {
     // console.log('SERVO UPDATED: ', servo);
   });
-  for (const id of [...Array(6).keys()]) {
+  for (const id of [...Array(6).keys()].map(k => k + 1)) {
+    // await platform.sendCommand(CommandGenerator.getId(0xFE));
     await platform.sendCommand(CommandGenerator.getAngleLimits(id));
     await platform.sendCommand(CommandGenerator.getPosition(id));
     await platform.sendCommand(CommandGenerator.getVoltage(id));
@@ -29,7 +30,7 @@ const wait = (t: number) => new Promise(ok => setTimeout(ok, t));
     await platform.sendCommand(CommandGenerator.getTempLimit(id));
     await platform.sendCommand(CommandGenerator.getVoltageLimit(id));
     await platform.sendCommand(CommandGenerator.getTargetAngleAndTime(id));
-    await platform.sendCommand(CommandGenerator.getPresetTargetAngleAndTime(id));
+    // await platform.sendCommand(CommandGenerator.getPresetTargetAngleAndTime(id));
   }
   console.log(platform.servoState());
 })();
