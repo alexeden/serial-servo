@@ -29,10 +29,16 @@ export class CommandGenerator {
   /** ServoMoveTimeWrite */
 
   /** ServoMoveTimeRead */
+  static getTargetAngleAndTime(id: number) {
+    return CommandGenerator.generate(Command.ServoMoveTimeRead, id);
+  }
 
   /** ServoMoveTimeWaitWrite */
 
   /** ServoMoveTimeWaitRead */
+  static getPresetTargetAngleAndTime(id: number) {
+    return CommandGenerator.generate(Command.ServoMoveTimeWaitRead, id);
+  }
 
   /** ServoMoveStart */
 
@@ -61,6 +67,9 @@ export class CommandGenerator {
   /** ServoVinLimitWrite */
 
   /** ServoVinLimitRead */
+  static getVoltageLimit(id: number) {
+    return CommandGenerator.generate(Command.ServoVinLimitRead, id);
+  }
 
   /** ServoTempMaxLimitWrite */
 

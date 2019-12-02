@@ -4,6 +4,7 @@ import { responsePacketFromBuffer, splitRawBuffer, ResponsePacket } from './resp
 import { Servo } from './types';
 import { Stream } from 'stream';
 
+const checkResponseIsOk = false;
 export class ServoPlatform extends Stream {
   static async ofPath(path: string) {
     const portOpts: SerialPort.OpenOptions = {
@@ -29,13 +30,16 @@ export class ServoPlatform extends Stream {
     private readonly port: SerialPort
   ) {
     super();
+    if (!checkResponseIsOk) {
+      console.log(`Response packet integrity will not be checked! This might lead to corrupt Servo data!`);
+    }
 
     this.servos = new Map();
 
     this.port.on('data', (rawBuffer: Buffer) =>
       splitRawBuffer(rawBuffer)
         .map(responsePacketFromBuffer)
-        .filter(response => response.ok)
+        .filter(response => !checkResponseIsOk || response.ok)
         .forEach((response, i) => {
           this.handleResponse(response);
         })

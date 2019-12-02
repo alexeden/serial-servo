@@ -45,10 +45,18 @@ export type ResponsePacket = {
 const extractResponseData = (command: Response, id: number, paramBytes: Buffer): Servo => {
   switch (command) {
     case Response.ServoMoveTimeRead: {
-      return { id, moveTime: 0 };
+      return {
+        id,
+        targetAngle: paramBytes.readUInt16BE(0),
+        moveTime: paramBytes.readUInt16BE(2),
+      };
     }
     case Response.ServoMoveTimeWaitRead: {
-      return { id };
+      return {
+        id,
+        presetTargetAngle: paramBytes.readUInt16BE(0),
+        presetMoveTime: paramBytes.readUInt16BE(2),
+      };
     }
     case Response.ServoIdRead: {
       return { id };
@@ -69,7 +77,11 @@ const extractResponseData = (command: Response, id: number, paramBytes: Buffer):
       };
     }
     case Response.ServoVinLimitRead: {
-      return { id };
+      return {
+        id,
+        volts: paramBytes.readUInt16BE(0),
+        maxVolts: paramBytes.readUInt16BE(2),
+      };
     }
     case Response.ServoTempMaxLimitRead: {
       return {
@@ -138,6 +150,20 @@ export const responsePacketFromBuffer = (rawBuffer: Buffer): ResponsePacket => {
   const length = buffer[3];
   const command = buffer[4];
   const paramBytes = buffer.subarray(4, 4 + length - 3);
+  const ok = [
+    typeof Response[command] === 'string',
+    length === responseDataLength(command),
+    paramBytes.length === length - 3,
+  ].every(condition => condition === true);
+
+  // if (!ok) {
+  //   console.error('Packet is not okay!', buffer);
+  //   console.log(`Command exists? ${typeof Response[command] === 'string'}`);
+  //   console.log(`Lengths match? ${length === responseDataLength(command)}`);
+  //   console.log(`Length byte is ${length}`);
+  //   console.log(`Expected ${responseDataLength(command)} bytes`);
+  //   console.log(`Param has ${paramBytes.length}  bytes`);
+  // }
   // const checksum = buffer[buffer.length - 1];
   // const compedChecksum = 0xFF & ~(id + length + command + paramBytes.reduce((sum, b) => sum + b, 0));
 
@@ -147,11 +173,7 @@ export const responsePacketFromBuffer = (rawBuffer: Buffer): ResponsePacket => {
     length,
     buffer,
     paramBytes,
-    ok: [
-      typeof Response[command] === 'string',
-      length === responseDataLength(command),
-      paramBytes.length === length - 3,
-    ].every(condition => condition === true),
+    ok,
     data: extractResponseData(command, id, paramBytes),
   };
 };

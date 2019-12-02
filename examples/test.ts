@@ -27,6 +27,9 @@ const wait = (t: number) => new Promise(ok => setTimeout(ok, t));
     await platform.sendCommand(CommandGenerator.getAngleOffset(id));
     await platform.sendCommand(CommandGenerator.getTemp(id));
     await platform.sendCommand(CommandGenerator.getTempLimit(id));
+    await platform.sendCommand(CommandGenerator.getVoltageLimit(id));
+    await platform.sendCommand(CommandGenerator.getTargetAngleAndTime(id));
+    await platform.sendCommand(CommandGenerator.getPresetTargetAngleAndTime(id));
   }
   console.log(platform.servoState());
 })();
