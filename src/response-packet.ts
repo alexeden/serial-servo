@@ -75,7 +75,7 @@ const extractResponseData = (command: Response, id: number, paramBytes: Buffer):
     case Response.ServoPosRead: {
       return {
         id,
-        angle: paramBytes.readUInt16LE(0),
+        angle: paramBytes.readInt16LE(0),
       };
     }
     case Response.ServoOrMotorModeRead: {

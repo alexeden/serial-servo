@@ -20,21 +20,25 @@ const wait = (t: number) => new Promise(ok => setTimeout(ok, t));
   platform.on('servoUpdate', servo => {
     // console.log('SERVO UPDATED: ', servo);
   });
+  await platform.sendCommand(CommandGenerator.setTargetAngleAndTime(0xFE, 1000, 20000));
+  // await platform.sendCommand(CommandGenerator.setTargetAngleAndTime(3, 0, 0));
+  // await wait(2000);
   for (const id of [...Array(6).keys()].map(k => k + 1)) {
-    await platform.sendCommand(CommandGenerator.getId(id));
-    await platform.sendCommand(CommandGenerator.getAngleLimits(id));
-    await platform.sendCommand(CommandGenerator.getLedIsOn(id));
-    await platform.sendCommand(CommandGenerator.getLedAlarms(id));
+    // await platform.sendCommand(CommandGenerator.getId(id));
+    // await platform.sendCommand(CommandGenerator.getAngleLimits(id));
     await platform.sendCommand(CommandGenerator.getPosition(id));
-    await platform.sendCommand(CommandGenerator.getVoltage(id));
-    await platform.sendCommand(CommandGenerator.getAngleOffset(id));
+    // await platform.sendCommand(CommandGenerator.getLedIsOn(id));
+    // await platform.sendCommand(CommandGenerator.getLedAlarms(id));
+    // await platform.sendCommand(CommandGenerator.getVoltage(id));
+    // await platform.sendCommand(CommandGenerator.getAngleOffset(id));
     await platform.sendCommand(CommandGenerator.getTemp(id));
-    await platform.sendCommand(CommandGenerator.getTempLimit(id));
-    await platform.sendCommand(CommandGenerator.getVoltageLimit(id));
+    // await platform.sendCommand(CommandGenerator.getTempLimit(id));
+    // await platform.sendCommand(CommandGenerator.getVoltageLimit(id));
     await platform.sendCommand(CommandGenerator.getTargetAngleAndTime(id));
-    await platform.sendCommand(CommandGenerator.getMotorIsOn(id));
-    await platform.sendCommand(CommandGenerator.getMotorMode(id));
-    // await platform.sendCommand(CommandGenerator.getPresetTargetAngleAndTime(id));
+    // await platform.sendCommand(CommandGenerator.getMotorIsOn(id));
+    // await platform.sendCommand(CommandGenerator.getMotorMode(id));
+    console.log(`sent all read commands to servo ${id}`);
   }
+
   console.log(platform.servoState());
 })();

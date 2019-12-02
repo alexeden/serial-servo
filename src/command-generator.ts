@@ -27,6 +27,13 @@ export class CommandGenerator {
   }
 
   /** ServoMoveTimeWrite */
+  static setTargetAngleAndTime(id: number, targetAngle: number, moveTime: number) {
+    const params = Buffer.allocUnsafe(4);
+    params.writeUInt16LE(targetAngle, 0);
+    params.writeUInt16LE(moveTime, 2);
+
+    return CommandGenerator.generate(Command.ServoMoveTimeWrite, id, ...params);
+  }
 
   /** ServoMoveTimeRead */
   static getTargetAngleAndTime(id: number) {
