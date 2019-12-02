@@ -18,18 +18,15 @@ const wait = (t: number) => new Promise(ok => setTimeout(ok, t));
   });
 
   platform.on('servoUpdate', servo => {
-    console.log('SERVO UPDATED: ', servo);
+    // console.log('SERVO UPDATED: ', servo);
   });
-  await platform.sendCommand(CommandGenerator.getAngleLimits(1));
-  await platform.sendCommand(CommandGenerator.getAngle(1));
-  await platform.sendCommand(CommandGenerator.getAngleLimits(2));
-  await platform.sendCommand(CommandGenerator.getAngle(2));
-  await platform.sendCommand(CommandGenerator.getAngleLimits(3));
-  await platform.sendCommand(CommandGenerator.getAngle(3));
-  await platform.sendCommand(CommandGenerator.getAngleLimits(4));
-  await platform.sendCommand(CommandGenerator.getAngle(4));
-  await platform.sendCommand(CommandGenerator.getAngleLimits(5));
-  await platform.sendCommand(CommandGenerator.getAngle(5));
-  await platform.sendCommand(CommandGenerator.getAngleLimits(6));
-  await platform.sendCommand(CommandGenerator.getAngle(6));
+  for (const id of [...Array(6).keys()]) {
+    await platform.sendCommand(CommandGenerator.getAngleLimits(id));
+    await platform.sendCommand(CommandGenerator.getPosition(id));
+    await platform.sendCommand(CommandGenerator.getVoltage(id));
+    await platform.sendCommand(CommandGenerator.getAngleOffset(id));
+    await platform.sendCommand(CommandGenerator.getTemp(id));
+    await platform.sendCommand(CommandGenerator.getTempLimit(id));
+  }
+  console.log(platform.servoState());
 })();

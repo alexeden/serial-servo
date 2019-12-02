@@ -54,7 +54,10 @@ const extractResponseData = (command: Response, id: number, paramBytes: Buffer):
       return { id };
     }
     case Response.ServoAngleOffsetRead: {
-      return { id };
+      return {
+        id,
+        offsetAngle: paramBytes.readInt8(0),
+      };
     }
     case Response.ServoAngleLimitRead: {
       return {
@@ -69,18 +72,27 @@ const extractResponseData = (command: Response, id: number, paramBytes: Buffer):
       return { id };
     }
     case Response.ServoTempMaxLimitRead: {
-      return { id };
+      return {
+        id,
+        maxTemp: paramBytes.readUInt8(0),
+      };
     }
     case Response.ServoTempRead: {
-      return { id };
+      return {
+        id,
+        temp: paramBytes.readUInt8(0),
+      };
     }
     case Response.ServoVinRead: {
-      return { id };
+      return {
+        id,
+        volts: paramBytes.readUInt16BE(0),
+      };
     }
     case Response.ServoPosRead: {
       return {
         id,
-        angle: paramBytes.readUInt16LE(0),
+        angle: paramBytes.readInt16BE(0),
       };
     }
     case Response.ServoOrMotorModeRead: {

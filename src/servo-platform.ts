@@ -50,6 +50,13 @@ export class ServoPlatform extends Stream {
     return this.port.isOpen;
   }
 
+  servoState(): { [id: number]: Servo } {
+    return [...this.servos.entries()].reduce(
+      (accum, [k, servo]) => ({ ...accum, [k]: { ...servo }}),
+      { }
+    );
+  }
+
   handleResponse({ id, data, ...response }: ResponsePacket) {
     if (this.servos.has(id)) {
       const updatedServo: Servo = { id, ...this.servos.get(id), ...data };

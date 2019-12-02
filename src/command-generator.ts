@@ -26,13 +26,80 @@ export class CommandGenerator {
     );
   }
 
-  /** Command.ServoPosRead */
-  static getAngle(id: number) {
-    return CommandGenerator.generate(Command.ServoPosRead, id);
+  /** ServoMoveTimeWrite */
+
+  /** ServoMoveTimeRead */
+
+  /** ServoMoveTimeWaitWrite */
+
+  /** ServoMoveTimeWaitRead */
+
+  /** ServoMoveStart */
+
+  /** ServoMoveStop */
+
+  /** ServoIdWrite */
+
+  /** ServoIdRead */
+
+  /** ServoAngleOffsetAdjust */
+
+  /** ServoAngleOffsetWrite */
+
+  /** ServoAngleOffsetRead */
+  static getAngleOffset(id: number) {
+    return CommandGenerator.generate(Command.ServoAngleOffsetRead, id);
   }
 
-  /** Command.ServoAngleLimitRead */
+  /** ServoAngleLimitWrite */
+
+  /** ServoAngleLimitRead */
   static getAngleLimits(id: number) {
     return CommandGenerator.generate(Command.ServoAngleLimitRead, id);
   }
+
+  /** ServoVinLimitWrite */
+
+  /** ServoVinLimitRead */
+
+  /** ServoTempMaxLimitWrite */
+
+  /** ServoTempMaxLimitRead */
+  static getTempLimit(id: number) {
+    return CommandGenerator.generate(Command.ServoTempMaxLimitRead, id);
+  }
+
+  /** ServoTempRead */
+  static getTemp(id: number) {
+    return CommandGenerator.generate(Command.ServoTempRead, id);
+  }
+
+  /** ServoVinRead */
+  static getVoltage(id: number) {
+    return CommandGenerator.generate(Command.ServoVinRead, id);
+  }
+
+  /** ServoPosRead */
+  static getPosition(id: number) {
+    return CommandGenerator.generate(Command.ServoPosRead, id);
+  }
+
+  /** ServoOrMotorModeWrite */
+
+  /** ServoOrMotorModeRead */
+
+  /** ServoLoadOrUnloadWrite */
+
+  /** ServoLoadOrUnloadRead */
+
+  /** ServoLedCtrlWrite */
+
+  /** ServoLedCtrlRead */
+
+  /** ServoLedErrorWrite */
+
+  /** ServoLedErrorRead */
+
+
+
 }
