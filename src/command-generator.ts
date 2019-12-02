@@ -105,6 +105,12 @@ export class CommandGenerator {
   }
 
   /** ServoTempMaxLimitWrite */
+  static setTempLimit(id: number, temp = 85) {
+    const params = Buffer.allocUnsafe(1);
+    params.writeUInt8(temp, 0);
+
+    return CommandGenerator.generate(Command.ServoTempMaxLimitWrite, id, ...params);
+  }
 
   /** ServoTempMaxLimitRead */
   static getTempLimit(id: number) {
