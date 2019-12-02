@@ -131,7 +131,7 @@ export const responsePacketFromBuffer = (rawBuffer: Buffer): ResponsePacket => {
   const id = buffer[2];
   const length = buffer[3];
   const command = buffer[4];
-  const paramBytes = buffer.subarray(4, 4 + length - 3);
+  const paramBytes = buffer.subarray(5, 5 + length - 3);
   const ok = [
     typeof Response[command] === 'string',
     length === responseDataLength(command),
