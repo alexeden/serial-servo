@@ -1,5 +1,6 @@
 import * as SerialPort from 'serialport';
 import { ServoPlatform, CommandGenerator } from '../src';
+import { MotorMode } from '../src/types';
 
 // const flush = () => new Promise((ok, err) => {
 //   port.flush(error => {
@@ -23,6 +24,7 @@ const wait = (t: number) => new Promise(ok => setTimeout(ok, t));
   await platform.sendCommand(CommandGenerator.setAngleLimits(4, { maxAngle: 400, minAngle: 600 }));
   await platform.sendCommand(CommandGenerator.setTargetAngleAndTime(0xFE, 1000, 0));
   await platform.sendCommand(CommandGenerator.setLedIsOn(0xFE, true));
+  await platform.sendCommand(CommandGenerator.setMotorMode(5, MotorMode.Motor, 100));
   // await platform.sendCommand(CommandGenerator.setTargetAngleAndTime(3, 0, 0));
   // await wait(2000);
   for (const id of [...Array(6).keys()].map(k => k + 1)) {
@@ -38,7 +40,7 @@ const wait = (t: number) => new Promise(ok => setTimeout(ok, t));
     // await platform.sendCommand(CommandGenerator.getVoltageLimit(id));
     await platform.sendCommand(CommandGenerator.getTargetAngleAndTime(id));
     // await platform.sendCommand(CommandGenerator.getMotorIsOn(id));
-    // await platform.sendCommand(CommandGenerator.getMotorMode(id));
+    await platform.sendCommand(CommandGenerator.getMotorMode(id));
     console.log(`sent all read commands to servo ${id}`);
   }
 

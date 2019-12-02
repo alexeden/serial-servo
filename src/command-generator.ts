@@ -1,4 +1,5 @@
 import { Command, commandDataLength, Response } from './constants';
+import { MotorMode } from './types';
 
 export type CommandPacket = Buffer;
 
@@ -113,6 +114,14 @@ export class CommandGenerator {
   }
 
   /** ServoOrMotorModeWrite */
+  static setMotorMode(id: number, mode: MotorMode = MotorMode.Servo, rotationSpeed = 0) {
+    const params = Buffer.allocUnsafe(4);
+    params.writeUInt8(mode, 0);
+    params.writeUInt8(0, 1);
+    params.writeUInt16LE(rotationSpeed, 2);
+
+    return CommandGenerator.generate(Command.ServoOrMotorModeWrite, id, ...params);
+  }
 
   /** ServoOrMotorModeRead */
   static getMotorMode(id: number) {
