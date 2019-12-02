@@ -1,6 +1,6 @@
 import * as SerialPort from 'serialport';
 import { CommandPacket } from './command-generator';
-import { responsePacketFromBuffer, splitRawBuffer, ResponsePacket } from './command-packet';
+import { responsePacketFromBuffer, splitRawBuffer, ResponsePacket } from './response-packet';
 import { Servo } from './types';
 import { Stream } from 'stream';
 
