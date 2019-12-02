@@ -25,21 +25,21 @@ export enum Alarm {
 }
 
 export interface Servo {
-  angle: number;
+  angle?: number;
   id: number;
-  ledAlarms: Alarm;
-  ledOn: boolean;
-  maxAngle: number;
-  maxTemp: number;
-  maxVolts: number;
-  minAngle: number;
-  motorOn: boolean;
-  motorMode: MotorMode;
-  moveTime: number;
-  moveWaitTime: number;
-  offsetAngle: number;
-  targetAngle: number;
-  rotationSpeed: number;
-  temp: number;
-  volts: number;
+  ledAlarms?: Alarm;
+  ledOn?: boolean;
+  maxAngle?: number;
+  maxTemp?: number;
+  maxVolts?: number;
+  minAngle?: number;
+  motorOn?: boolean;
+  motorMode?: MotorMode;
+  moveTime?: number;
+  moveWaitTime?: number;
+  offsetAngle?: number;
+  targetAngle?: number;
+  rotationSpeed?: number;
+  temp?: number;
+  volts?: number;
 }
