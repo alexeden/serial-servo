@@ -1,5 +1,4 @@
 import * as SerialPort from 'serialport';
-import { Response } from './constants';
 import { CommandPacket } from './command-generator';
 import { responsePacketFromBuffer, splitRawBuffer, ResponsePacket } from './command-packet';
 import { Servo } from './types';
@@ -38,7 +37,6 @@ export class ServoPlatform extends Stream {
         .map(responsePacketFromBuffer)
         .filter(response => response.ok)
         .forEach((response, i) => {
-          console.log(`${Response[response.command]} packet: `, response);
           this.handleResponse(response);
         })
     );
@@ -69,7 +67,7 @@ export class ServoPlatform extends Stream {
   sendCommand(commandPacket: CommandPacket) {
     return new Promise((ok, err) => {
       const sent = this.port.write(commandPacket);
-      console.log('command sent?', sent);
+      if (!sent) throw new Error(`Command not sent! ${commandPacket.toString()}`);
 
       this.port.drain(error => {
         if (error) {

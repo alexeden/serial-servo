@@ -57,8 +57,6 @@ const extractResponseData = (command: Response, id: number, paramBytes: Buffer):
       return { id };
     }
     case Response.ServoAngleLimitRead: {
-      console.log(paramBytes);
-
       return {
         id,
         minAngle: paramBytes.readInt16BE(0),
@@ -112,16 +110,12 @@ export const splitRawBuffer = (buffer: Buffer): Buffer[] => {
       ? buffer.subarray(headerIndex, nextHeaderIndex)
       : buffer.subarray(headerIndex);
 
-    console.log(`split buffer: `, firstBuffer);
-
     return [
       Buffer.from(firstBuffer),
       ...(nextHeaderIndex >= 0 ? splitRawBuffer(buffer.subarray(nextHeaderIndex)) : []),
     ];
   }
   else {
-    console.log('no packets left: ', buffer);
-
     return [];
   }
 };
