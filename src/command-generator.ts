@@ -127,6 +127,12 @@ export class CommandGenerator {
   }
 
   /** ServoLedCtrlWrite */
+  static setLedIsOn(id: number, ledIsOn = true) {
+    const params = Buffer.allocUnsafe(1);
+    params.writeUInt8(ledIsOn ? 0 : 1, 0);
+
+    return CommandGenerator.generate(Command.ServoLedCtrlWrite, id, ...params);
+  }
 
   /** ServoLedCtrlRead */
   static getLedIsOn(id: number) {
