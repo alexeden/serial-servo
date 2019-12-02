@@ -21,7 +21,7 @@ const wait = (t: number) => new Promise(ok => setTimeout(ok, t));
     // console.log('SERVO UPDATED: ', servo);
   });
   for (const id of [...Array(6).keys()].map(k => k + 1)) {
-    // await platform.sendCommand(CommandGenerator.getId(0xFE));
+    await platform.sendCommand(CommandGenerator.getId(id));
     await platform.sendCommand(CommandGenerator.getAngleLimits(id));
     await platform.sendCommand(CommandGenerator.getLedIsOn(id));
     await platform.sendCommand(CommandGenerator.getLedAlarms(id));

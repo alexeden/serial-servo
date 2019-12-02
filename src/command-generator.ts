@@ -50,8 +50,6 @@ export class CommandGenerator {
 
   /** ServoIdRead */
   static getId(id: number) {
-    throw new Error(`"ServoIdRead" is not implemented. Currently experiences issues with bad response packets from servos.`);
-
     return CommandGenerator.generate(Command.ServoIdRead, id);
   }
 

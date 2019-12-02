@@ -28,6 +28,8 @@ const extractResponseData = (command: Response, id: number, paramBytes: Buffer):
       };
     }
     case Response.ServoIdRead: {
+      if (id !== paramBytes[0]) throw new Error(`Expected ID to be ${id}, received ${paramBytes[0]}!`);
+
       return {
         id,
       };
