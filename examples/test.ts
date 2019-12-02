@@ -14,7 +14,7 @@ const wait = (t: number) => new Promise(ok => setTimeout(ok, t));
   const platform = await ServoPlatform.ofPath('/dev/ttyAMA0');
 
   platform.on('newServo', servo => {
-    console.log('SERVO ADDED: ', servo);
+    // console.log('SERVO ADDED: ', servo);
   });
 
   platform.on('servoUpdate', servo => {
