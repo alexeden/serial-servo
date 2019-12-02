@@ -91,7 +91,7 @@ export class CommandGenerator {
   }
 
   /** ServoVinLimitWrite */
-  static setVoltageLimits(id: number, { minVolts = 0, maxVolts = 1000 } = { }) {
+  static setVoltageLimits(id: number, { minVolts = 4500, maxVolts = 12000 } = { }) {
     const params = Buffer.allocUnsafe(4);
     params.writeUInt16LE(minVolts, 0);
     params.writeUInt16LE(maxVolts, 2);
