@@ -1,11 +1,11 @@
 import { Response, CommandHeader, responseDataLength } from './constants';
 import { Servo } from './types';
 
-export type ResponsePacket<C extends Response> = {
+export type ResponsePacket = {
   ok: boolean;
   buffer: Buffer;
   id: number;
-  command: C;
+  command: Response;
   length: number;
   paramBytes: Buffer;
   data: Partial<Servo>;
@@ -42,7 +42,7 @@ export type ResponsePacket<C extends Response> = {
 //   ? Pick<Servo, 'id' | 'ledAlarms'>
 //   : never;
 
-const extractResponseData = <C extends Response>(command: Response, id: number, paramBytes: Buffer): Partial<Servo> => {
+const extractResponseData = (command: Response, id: number, paramBytes: Buffer): Partial<Servo> => {
   switch (command) {
     case Response.ServoMoveTimeRead: {
       return { id, moveTime: 0 };
@@ -126,11 +126,11 @@ export const splitRawBuffer = (buffer: Buffer): Buffer[] => {
   }
 };
 
-export const responsePacketFromBuffer = <C extends Response>(rawBuffer: Buffer): ResponsePacket<C> => {
+export const responsePacketFromBuffer = (rawBuffer: Buffer): ResponsePacket => {
   const buffer = Buffer.from(rawBuffer);
   const id = buffer[2];
   const length = buffer[3];
-  const command = buffer[4] as C;
+  const command = buffer[4];
   const paramBytes = buffer.subarray(4, 4 + length - 3);
   // const checksum = buffer[buffer.length - 1];
   // const compedChecksum = 0xFF & ~(id + length + command + paramBytes.reduce((sum, b) => sum + b, 0));
@@ -142,6 +142,7 @@ export const responsePacketFromBuffer = <C extends Response>(rawBuffer: Buffer):
     buffer,
     paramBytes,
     ok: [
+      typeof Response[command] === 'string',
       length === responseDataLength(command),
       paramBytes.length === length - 3,
     ].every(condition => condition === true),
