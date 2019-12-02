@@ -91,7 +91,7 @@ export class CommandGenerator {
   }
 
   /** ServoVinLimitWrite */
-  static setVoltageLimits(id: number, { minVolts, maxVolts } = { minVolts: 0, maxVolts: 1000 }) {
+  static setVoltageLimits(id: number, { minVolts = 0, maxVolts = 1000 } = { }) {
     const params = Buffer.allocUnsafe(4);
     params.writeUInt16LE(minVolts, 0);
     params.writeUInt16LE(maxVolts, 2);
@@ -142,6 +142,12 @@ export class CommandGenerator {
   }
 
   /** ServoLoadOrUnloadWrite */
+  static setMotorIsOn(id: number, motorIsOn = true) {
+    const params = Buffer.allocUnsafe(1);
+    params.writeUInt8(motorIsOn ? 1 : 0, 0);
+
+    return CommandGenerator.generate(Command.ServoLoadOrUnloadWrite, id, ...params);
+  }
 
   /** ServoLoadOrUnloadRead */
   static getMotorIsOn(id: number) {
