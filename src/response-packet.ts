@@ -16,15 +16,15 @@ const extractResponseData = (command: Response, id: number, paramBytes: Buffer):
     case Response.ServoMoveTimeRead: {
       return {
         id,
-        targetAngle: paramBytes.readUInt16BE(0),
-        moveTime: paramBytes.readUInt16BE(2),
+        targetAngle: paramBytes.readUInt16LE(0),
+        moveTime: paramBytes.readUInt16LE(2),
       };
     }
     case Response.ServoMoveTimeWaitRead: {
       return {
         id,
-        presetTargetAngle: paramBytes.readUInt16BE(0),
-        presetMoveTime: paramBytes.readUInt16BE(2),
+        presetTargetAngle: paramBytes.readUInt16LE(0),
+        presetMoveTime: paramBytes.readUInt16LE(2),
       };
     }
     case Response.ServoIdRead: {
@@ -41,15 +41,15 @@ const extractResponseData = (command: Response, id: number, paramBytes: Buffer):
     case Response.ServoAngleLimitRead: {
       return {
         id,
-        minAngle: paramBytes.readInt16BE(0) & 0x3FF,
-        maxAngle: paramBytes.readInt16BE(2) & 0x3FF,
+        minAngle: paramBytes.readUInt16LE(0),
+        maxAngle: paramBytes.readUInt16LE(2),
       };
     }
     case Response.ServoVinLimitRead: {
       return {
         id,
-        volts: paramBytes.readUInt16BE(0),
-        maxVolts: paramBytes.readUInt16BE(2),
+        volts: paramBytes.readUInt16LE(0),
+        maxVolts: paramBytes.readUInt16LE(2),
       };
     }
     case Response.ServoTempMaxLimitRead: {
@@ -67,38 +67,38 @@ const extractResponseData = (command: Response, id: number, paramBytes: Buffer):
     case Response.ServoVinRead: {
       return {
         id,
-        volts: paramBytes.readUInt16BE(0),
+        volts: paramBytes.readUInt16LE(0),
       };
     }
     case Response.ServoPosRead: {
       return {
         id,
-        angle: paramBytes.readUInt16BE(0) & 0x3FF,
+        angle: paramBytes.readUInt16LE(0),
       };
     }
     case Response.ServoOrMotorModeRead: {
       return {
         id,
-        motorMode: paramBytes[0] & 1,
-        rotationSpeed: paramBytes.readUInt16BE(2),
+        motorMode: paramBytes[0],
+        rotationSpeed: paramBytes.readUInt16LE(2),
       };
     }
     case Response.ServoLoadOrUnloadRead: {
       return {
         id,
-        motorIsOn: !!(paramBytes[0] & 1),
+        motorIsOn: !!paramBytes[0],
       };
     }
     case Response.ServoLedCtrlRead: {
       return {
         id,
-        ledIsOn: !(paramBytes[0] & 1),
+        ledIsOn: !paramBytes[0],
       };
     }
     case Response.ServoLedErrorRead: {
       return {
         id,
-        ledAlarms: paramBytes[0] & 0xF,
+        ledAlarms: paramBytes[0],
       };
     }
   }
@@ -138,6 +138,7 @@ export const responsePacketFromBuffer = (rawBuffer: Buffer): ResponsePacket => {
     paramBytes.length === length - 3,
   ].every(condition => condition === true);
 
+  // console.log(`${Response[command]} param bytes: `, paramBytes);
   // if (!ok) {
   //   console.error('Packet is not okay!', buffer);
   //   console.log(`Command exists? ${typeof Response[command] === 'string'}`);
