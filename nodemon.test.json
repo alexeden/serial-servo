@@ -1,6 +1,6 @@
 {
   "ext": "ts,json,cc,h,gyp",
-  "exec": "npm run test -- examples/test.ts",
+  "exec": "npm run test -- examples/scan-and-print.ts",
   "events": {},
   "watch": [
     "src/**",
