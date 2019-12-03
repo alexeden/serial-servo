@@ -1,5 +1,5 @@
 import * as SerialPort from 'serialport';
-import { CommandPacket } from './command-generator';
+import { CommandPacket, CommandGenerator } from './command-generator';
 import { responsePacketFromBuffer, splitRawBuffer, ResponsePacket } from './response-packet';
 import { Servo } from './types';
 import { Stream } from 'stream';
@@ -52,6 +52,14 @@ export class ServoPlatform extends Stream {
 
   get isOpen() {
     return this.port.isOpen;
+  }
+
+  async scan(start = 0x01, end = 0xFF): Promise<void> {
+    if (start > end) return;
+    console.log(`scanning for Servo with id ${start}`);
+    await this.sendCommand(CommandGenerator.getId(start));
+
+    return this.scan(start + 1);
   }
 
   servoState(): { [id: number]: Servo } {
