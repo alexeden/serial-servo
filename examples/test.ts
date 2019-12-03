@@ -14,40 +14,93 @@ const wait = (t: number) => new Promise(ok => setTimeout(ok, t));
   console.log(await SerialPort.list());
   const platform = await ServoPlatform.ofPath('/dev/ttyAMA0');
 
+
   platform.on('newServo', servo => {
-    // console.log('SERVO ADDED: ', servo);
+    console.log('SERVO ADDED: ', servo);
   });
 
   platform.on('servoUpdate', servo => {
     // console.log('SERVO UPDATED: ', servo);
   });
-  // await platform.sendCommand(CommandGenerator.setAngleLimits(4, { maxAngle: 400, minAngle: 600 }));
-  // await platform.sendCommand(CommandGenerator.setLedIsOn(0xFE, true));
-  await platform.sendCommand(CommandGenerator.setTempLimit(0xFE, 50));
-  await platform.sendCommand(CommandGenerator.setVoltageLimits(0xFE));
-  // await platform.sendCommand(CommandGenerator.setVoltageLimits(0xFE, { maxVolts: 5000 }));
-  await platform.sendCommand(CommandGenerator.setTargetAngleAndTime(0xFE, 0, 0));
-  await wait(2000);
-  // await platform.sendCommand(CommandGenerator.setMotorIsOn(5, false));
-  // await platform.sendCommand(CommandGenerator.startMove(5));
 
-  // await platform.sendCommand(CommandGenerator.setTargetAngleAndTime(3, 0, 0));
-  for (const id of [...Array(6).keys()].map(k => k + 1)) {
-    // await platform.sendCommand(CommandGenerator.getId(id));
-    await platform.sendCommand(CommandGenerator.getAngleLimits(id));
-    await platform.sendCommand(CommandGenerator.getPosition(id));
-    await platform.sendCommand(CommandGenerator.getLedIsOn(id));
-    await platform.sendCommand(CommandGenerator.getLedAlarms(id));
-    await platform.sendCommand(CommandGenerator.getVoltage(id));
-    await platform.sendCommand(CommandGenerator.getAngleOffset(id));
-    await platform.sendCommand(CommandGenerator.getTemp(id));
-    await platform.sendCommand(CommandGenerator.getTempLimit(id));
-    await platform.sendCommand(CommandGenerator.getVoltageLimits(id));
-    await platform.sendCommand(CommandGenerator.getTargetAngleAndTime(id));
-    await platform.sendCommand(CommandGenerator.getMotorIsOn(id));
-    await platform.sendCommand(CommandGenerator.getMotorMode(id));
-    console.log(`sent all read commands to servo ${id}`);
-  }
+  await platform.scan();
+  // await platform.sendCommands(CommandGenerator.setAngleLimits(0xFE));
+  // await platform.sendCommands(CommandGenerator.setLedIsOn(0xFE, true));
+  // await platform.sendCommands(CommandGenerator.setTempLimit(0xFE, 50));
+  // await platform.sendCommands(CommandGenerator.setVoltageLimits(0xFE));
+  // await platform.sendCommands(CommandGenerator.setVoltageLimits(0xFE, { maxVolts: 5000 }));
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(0xFE, 0, 0));
+  // await wait(2000);
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(0xFE, 1000, 0));
+  // await wait(2000);
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(0xFE, 0, 0));
+  // await wait(2000);
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(0xFE, 1000, 0));
+  // await wait(2000);
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(0xFE, 0, 0));
+  // await wait(2000);
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(0xFE, 1000, 0));
+  // await wait(2000);
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(0xFE, 0, 0));
+  // await wait(2000);
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(0xFE, 1000, 0));
+  // await wait(2000);
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(0xFE, 0, 0));
+  // await wait(2000);
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(0xFE, 1000, 0));
+  // await wait(2000);
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(0xFE, 0, 0));
+  // await wait(2000);
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(0xFE, 1000, 0));
+  // await wait(2000);
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(0xFE, 0, 0));
+  // await wait(2000);
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(0xFE, 1000, 0));
+  // await wait(2000);
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(0xFE, 0, 0));
+  // await wait(2000);
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(0xFE, 1000, 0));
+  // await wait(2000);
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(0xFE, 0, 0));
+  // await wait(2000);
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(0xFE, 1000, 0));
+  // await wait(2000);
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(0xFE, 0, 0));
+  // await wait(2000);
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(0xFE, 1000, 0));
+  // await wait(2000);
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(0xFE, 0, 0));
+  // await wait(2000);
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(0xFE, 1000, 0));
+  // await wait(2000);
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(0xFE, 0, 0));
+  // await wait(2000);
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(0xFE, 1000, 0));
+  // await wait(2000);
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(0xFE, 0, 0));
+  // await wait(2000);
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(0xFE, 1000, 0));
+  // await wait(2000);
+  // await platform.sendCommands(CommandGenerator.setMotorIsOn(5, false));
+  // await platform.sendCommands(CommandGenerator.startMove(5));
 
-  console.log(platform.servoState());
+  // await platform.sendCommands(CommandGenerator.setTargetAngleAndTime(3, 0, 0));
+  // for (const id of [...Array(6).keys()].map(k => k + 1)) {
+  //   // await platform.sendCommands(CommandGenerator.getId(id));
+  //   await platform.sendCommands(CommandGenerator.getAngleLimits(id));
+  //   await platform.sendCommands(CommandGenerator.getPosition(id));
+  //   await platform.sendCommands(CommandGenerator.getLedIsOn(id));
+  //   await platform.sendCommands(CommandGenerator.getLedAlarms(id));
+  //   await platform.sendCommands(CommandGenerator.getVoltage(id));
+  //   await platform.sendCommands(CommandGenerator.getAngleOffset(id));
+  //   await platform.sendCommands(CommandGenerator.getTemp(id));
+  //   await platform.sendCommands(CommandGenerator.getTempLimit(id));
+  //   await platform.sendCommands(CommandGenerator.getVoltageLimits(id));
+  //   await platform.sendCommands(CommandGenerator.getTargetAngleAndTime(id));
+  //   await platform.sendCommands(CommandGenerator.getMotorIsOn(id));
+  //   await platform.sendCommands(CommandGenerator.getMotorMode(id));
+  //   console.log(`sent all read commands to servo ${id}`);
+  // }
+
+  // console.log(platform.servoState());
 })();
