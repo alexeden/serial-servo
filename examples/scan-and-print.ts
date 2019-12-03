@@ -6,23 +6,25 @@ import { ServoPlatform, CommandGenerator, Servo } from '../src';
 
   platform.on('newServo', async (servo: Servo) => {
     console.log(`Servo with ID ${servo.id} responded`);
-    await new Promise(ok => setTimeout(ok, 500));
+    // await new Promise(ok => setTimeout(ok, 500));
 
     // await platform.sendCommands(CommandGenerator.getId(servo.id));
-    setTimeout(async () => {
-      await platform.sendCommands(CommandGenerator.getAngleLimits(servo.id));
-      await platform.sendCommands(CommandGenerator.getPosition(servo.id));
-      await platform.sendCommands(CommandGenerator.getLedIsOn(servo.id));
-      await platform.sendCommands(CommandGenerator.getLedAlarms(servo.id));
-      await platform.sendCommands(CommandGenerator.getVoltage(servo.id));
-      await platform.sendCommands(CommandGenerator.getAngleOffset(servo.id));
-      await platform.sendCommands(CommandGenerator.getTemp(servo.id));
-      await platform.sendCommands(CommandGenerator.getTempLimit(servo.id));
-      await platform.sendCommands(CommandGenerator.getVoltageLimits(servo.id));
-      await platform.sendCommands(CommandGenerator.getTargetAngleAndTime(servo.id));
-      await platform.sendCommands(CommandGenerator.getMotorIsOn(servo.id));
-      await platform.sendCommands(CommandGenerator.getMotorMode(servo.id));
-    }, 1000 * servo.id);
+    // setTimeout(async () => {
+    //   platform.sendCommands(
+    //     CommandGenerator.getAngleLimits(servo.id),
+    //     CommandGenerator.getPosition(servo.id),
+    //     CommandGenerator.getLedIsOn(servo.id),
+    //     CommandGenerator.getLedAlarms(servo.id),
+    //     CommandGenerator.getVoltage(servo.id),
+    //     CommandGenerator.getAngleOffset(servo.id),
+    //     CommandGenerator.getTemp(servo.id),
+    //     CommandGenerator.getTempLimit(servo.id),
+    //     CommandGenerator.getVoltageLimits(servo.id),
+    //     CommandGenerator.getTargetAngleAndTime(servo.id),
+    //     CommandGenerator.getMotorIsOn(servo.id),
+    //     CommandGenerator.getMotorMode(servo.id)
+    //   );
+    // }, 1000 * servo.id);
   });
 
 

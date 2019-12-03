@@ -144,7 +144,8 @@ export const responsePacketFromBuffer = (rawBuffer: Buffer): ResponsePacket => {
   ].every(condition => condition === true);
 
   if (checksum !== compedChecksum) {
-    throw new Error(`Received a corrupt response packet for ${Response[command]} command!`);
+    console.error(`Received a corrupt response packet for ${Response[command]} command! ${JSON.stringify(buffer)}`);
+    // throw new Error(`Received a corrupt response packet for ${Response[command]} command! ${JSON.stringify(buffer)}`);
   }
 
   return {
