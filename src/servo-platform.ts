@@ -1,8 +1,10 @@
 import * as SerialPort from 'serialport';
+import { Stream } from 'stream';
+import PQueue from 'p-queue';
 import { CommandPacket, CommandGenerator } from './command-generator';
 import { responsePacketFromBuffer, splitRawBuffer, ResponsePacket } from './response-packet';
 import { Servo } from './types';
-import { Stream } from 'stream';
+import { range } from './utils';
 
 const checkResponseIsOk = false;
 export class ServoPlatform extends Stream {
@@ -24,17 +26,27 @@ export class ServoPlatform extends Stream {
     });
   }
 
+  static wait = (t: number) => new Promise(ok => setTimeout(ok, t));
+
   private readonly servos: Map<number, Servo>;
+  private readonly queue: PQueue;
 
   private constructor(
     private readonly port: SerialPort
   ) {
     super();
+
     if (!checkResponseIsOk) {
       console.log(`Response packet integrity will not be checked! This might lead to corrupt Servo data!`);
     }
 
     this.servos = new Map();
+    this.queue = new PQueue({ concurrency: 1 });
+
+    let count = 0;
+    this.queue.on('active', () => {
+      console.log(`Working on item #${++count}.  Size: ${this.queue.size}  Pending: ${this.queue.pending}`);
+    });
 
     this.port.on('data', (rawBuffer: Buffer) =>
       splitRawBuffer(rawBuffer)
@@ -54,13 +66,16 @@ export class ServoPlatform extends Stream {
     return this.port.isOpen;
   }
 
-  async scan(start = 0x01, end = 0xFF): Promise<void> {
-    if (start > end) return;
-    console.log(`scanning for Servo with id ${start}`);
-    await this.sendCommand(CommandGenerator.getId(start));
+  async scan(start = 0x01, end = 0xFF): Promise<unknown[]> {
+    return this.sendCommands(...range(start, end).map(id =>
+      CommandGenerator.getId(id)
+    ));
+    // if (start > end) return;
+    // this.sendCommands(CommandGenerator.getId(start));
 
-    return this.scan(start + 1);
+    // return this.scan(start + 1);
   }
+
 
   servoState(): { [id: number]: Servo } {
     return [...this.servos.entries()].reduce(
@@ -83,18 +98,21 @@ export class ServoPlatform extends Stream {
     }
   }
 
-  sendCommand(commandPacket: CommandPacket) {
-    return new Promise((ok, err) => {
-      const sent = this.port.write(commandPacket);
-      if (!sent) throw new Error(`Command not sent! ${commandPacket.toString()}`);
+  sendCommands(...commandPackets: CommandPacket[]) {
+    return this.queue.addAll(
+      commandPackets.map(commandPacket =>
+        () => new Promise((ok, err) => {
+          const sent = this.port.write(commandPacket, (error, bytesWritten) => {
+            if (error) {
+              console.error('Error writing to port: ', error);
+              err(error);
+            }
+            else ok(bytesWritten);
+          });
 
-      this.port.drain(error => {
-        if (error) {
-          console.error('drain error: ', error);
-          err(error);
-        }
-        else ok();
-      });
-    });
+          if (!sent) err(new Error(`Command not sent! ${commandPacket.toString()}`));
+        })
+      )
+    );
   }
 }
