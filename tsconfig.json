@@ -22,7 +22,7 @@
     "types": [
       "node"
     ],
-    "target": "esnext"
+    "target": "ES2015"
   },
   "exclude": [
     "node_modules"
