@@ -6,7 +6,7 @@ import { responsePacketFromBuffer, splitRawBuffer, ResponsePacket } from './resp
 import { Servo } from './types';
 import { range } from './utils';
 
-const checkResponseIsOk = false;
+const checkResponseIsOk = true;
 export class ServoPlatform extends Stream {
   static async ofPath(path: string) {
     const portOpts: SerialPort.OpenOptions = {
@@ -43,9 +43,9 @@ export class ServoPlatform extends Stream {
     this.servos = new Map();
     this.queue = new PQueue({ concurrency: 1 });
 
-    let count = 0;
+    // let count = 0;
     this.queue.on('active', () => {
-      console.log(`Working on item #${++count}.  Size: ${this.queue.size}  Pending: ${this.queue.pending}`);
+      // console.log(`Working on item #${++count}.  Size: ${this.queue.size}  Pending: ${this.queue.pending}`);
     });
 
     this.port.on('data', (rawBuffer: Buffer) =>
@@ -70,10 +70,6 @@ export class ServoPlatform extends Stream {
     return this.sendCommands(...range(start, end).map(id =>
       CommandGenerator.getId(id)
     ));
-    // if (start > end) return;
-    // this.sendCommands(CommandGenerator.getId(start));
-
-    // return this.scan(start + 1);
   }
 
 
@@ -99,9 +95,15 @@ export class ServoPlatform extends Stream {
   }
 
   sendCommands(...commandPackets: CommandPacket[]) {
+    const wait = () => new Promise(ok => setTimeout(ok, 1));
+
     return this.queue.addAll(
-      commandPackets.map(commandPacket =>
-        () => new Promise((ok, err) => {
+      commandPackets.map((commandPacket, i) =>
+        () => new Promise(async (ok, err) => {
+
+          // console.log(`writing command packet index ${i} of length ${commandPacket.length}`);
+          await wait();
+
           const sent = this.port.write(commandPacket, (error, bytesWritten) => {
             if (error) {
               console.error('Error writing to port: ', error);
