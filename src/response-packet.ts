@@ -128,33 +128,37 @@ export const splitRawBuffer = (buffer: Buffer): Buffer[] => {
   }
 };
 
-export const responsePacketFromBuffer = (rawBuffer: Buffer): ResponsePacket => {
-  const buffer = Buffer.from(rawBuffer);
-  const id = buffer[2];
-  const length = buffer[3];
-  const command = buffer[4];
-  const paramBytes = buffer.subarray(5, 5 + length - 3);
-  const checksum = buffer[buffer.length - 1];
-  const compedChecksum = 0xFF & ~(id + length + command + paramBytes.reduce((sum, b) => sum + b, 0));
-  const ok = [
-    typeof Response[command] === 'string',
-    length === responseDataLength(command),
-    paramBytes.length === length - 3,
-    checksum === compedChecksum,
-  ].every(condition => condition === true);
+export interface ResponsePacketParserOptions {
+  throwOnChecksumMismatch: boolean;
+}
 
-  if (checksum !== compedChecksum) {
-    console.error(`Received a corrupt response packet for ${Response[command]} command! ${JSON.stringify(buffer)}`);
-    // throw new Error(`Received a corrupt response packet for ${Response[command]} command! ${JSON.stringify(buffer)}`);
-  }
+export const ResponsePacketParser = (opts: Partial<ResponsePacketParserOptions> = { }) =>
+  (rawBuffer: Buffer): ResponsePacket => {
+    const buffer = Buffer.from(rawBuffer);
+    const id = buffer[2];
+    const length = buffer[3];
+    const command = buffer[4];
+    const paramBytes = buffer.subarray(5, 5 + length - 3);
+    const checksum = buffer[buffer.length - 1];
+    const compedChecksum = 0xFF & ~(id + length + command + paramBytes.reduce((sum, b) => sum + b, 0));
+    const ok = [
+      typeof Response[command] === 'string',
+      length === responseDataLength(command),
+      paramBytes.length === length - 3,
+      checksum === compedChecksum,
+    ].every(condition => condition === true);
 
-  return {
-    id,
-    command,
-    length,
-    buffer,
-    paramBytes,
-    ok,
-    data: extractResponseData(command, id, paramBytes),
+    if ((opts.throwOnChecksumMismatch ?? true) && checksum !== compedChecksum) {
+      throw new Error(`Received a corrupt response packet for ${Response[command]} command! ${JSON.stringify(buffer)}`);
+    }
+
+    return {
+      id,
+      command,
+      length,
+      buffer,
+      paramBytes,
+      ok,
+      data: extractResponseData(command, id, paramBytes),
+    };
   };
-};

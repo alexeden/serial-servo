@@ -2,7 +2,7 @@ import * as SerialPort from 'serialport';
 import { Stream } from 'stream';
 import PQueue from 'p-queue';
 import { CommandPacket, CommandGenerator } from './command-generator';
-import { responsePacketFromBuffer, splitRawBuffer, ResponsePacket } from './response-packet';
+import { ResponsePacketParser, splitRawBuffer, ResponsePacket } from './response-packet';
 import { Servo } from './types';
 import { range } from './utils';
 
@@ -30,6 +30,7 @@ export class ServoPlatform extends Stream {
 
   private readonly servos: Map<number, Servo>;
   private readonly queue: PQueue;
+  private readonly responsePacketFromBuffer: ReturnType<typeof ResponsePacketParser>;
 
   private constructor(
     private readonly port: SerialPort
@@ -42,6 +43,7 @@ export class ServoPlatform extends Stream {
 
     this.servos = new Map();
     this.queue = new PQueue({ concurrency: 1 });
+    this.responsePacketFromBuffer = ResponsePacketParser();
 
     // let count = 0;
     this.queue.on('active', () => {
@@ -50,7 +52,7 @@ export class ServoPlatform extends Stream {
 
     this.port.on('data', (rawBuffer: Buffer) =>
       splitRawBuffer(rawBuffer)
-        .map(responsePacketFromBuffer)
+        .map(this.responsePacketFromBuffer)
         .filter(response => !checkResponseIsOk || response.ok)
         .forEach((response, i) => {
           this.handleResponse(response);
