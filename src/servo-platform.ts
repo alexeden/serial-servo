@@ -99,7 +99,7 @@ export class ServoPlatform extends Stream {
   }
 
   sendCommands(...commandPackets: CommandPacket[]) {
-    const wait = () => new Promise(ok => setTimeout(ok, 1));
+    const wait = () => new Promise(ok => setTimeout(ok, 10));
 
     return this.queue.addAll(
       commandPackets.map((commandPacket, i) =>
