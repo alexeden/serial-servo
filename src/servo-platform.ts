@@ -43,7 +43,9 @@ export class ServoPlatform extends Stream {
 
     this.servos = new Map();
     this.queue = new PQueue({ concurrency: 1 });
-    this.responsePacketFromBuffer = ResponsePacketParser();
+    this.responsePacketFromBuffer = ResponsePacketParser({
+      throwOnChecksumMismatch: false,
+    });
 
     // let count = 0;
     this.queue.on('active', () => {

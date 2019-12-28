@@ -148,8 +148,12 @@ export const ResponsePacketParser = (opts: Partial<ResponsePacketParserOptions> 
       checksum === compedChecksum,
     ].every(condition => condition === true);
 
-    if ((opts.throwOnChecksumMismatch ?? true) && checksum !== compedChecksum) {
-      throw new Error(`Received a corrupt response packet for ${Response[command]} command! ${JSON.stringify(buffer)}`);
+    if (checksum !== compedChecksum) {
+      const errorMsg = `Received a corrupt response packet for ${Response[command]} command of ID ${id}! ${JSON.stringify(buffer)}`;
+      if (opts.throwOnChecksumMismatch ?? true)
+        throw new Error(errorMsg);
+      else
+        console.error(errorMsg);
     }
 
     return {
